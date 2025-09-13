@@ -83,7 +83,7 @@ def _decode_onehot(row: pd.Series) -> dict[str, str]:
 
     return {"MCLFCHAB1": hab, "MCLFCSITFAM": sitfam, "CSP_Tit": csp}
 
-def _safe_float(v: Any):
+def _safe_float(v: any):
     try:
         if v is None or (isinstance(v, float) and np.isnan(v)):
             return None
