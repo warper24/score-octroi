@@ -22,11 +22,6 @@ app.add_middleware(
     allow_methods=["*"], allow_headers=["*"],
 )
 
-# Static (front)
-static_dir = Path(__file__).parent / "static"
-if static_dir.exists():
-    app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
-
 # Load artifacts at startup
 booster = Booster()
 booster.load_model(str(ART_DIR / "model_xgb.json"))
@@ -135,9 +130,9 @@ def predict(records: list[dict]):
     y_proba = booster.inplace_predict(X[VAR_MODEL])
     # y_pred seuil meta
     y_pred = (y_proba >= THRESHOLD).astype(int)
-    return {
-        "count": int(len(y_proba)),
-        "y_proba": list(map(float, y_proba)),
-        "y_pred": list(map(int, y_pred)),
-        "threshold": THRESHOLD,
-    }
+    return {"y_proba": y_proba.tolist(), "y_pred": y_pred.tolist(), "threshold": THRESHOLD}
+
+# MONTER le front APRÈS les routes, pour éviter de capturer /reference/* et /predict
+static_dir = Path(__file__).parent / "static"
+if static_dir.exists():
+    app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
