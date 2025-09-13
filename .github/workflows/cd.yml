@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch: {}  # permet de relancer manuellement
 
 env:
   IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/score-octroi
@@ -15,10 +16,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check Docker Hub secrets
+        run: |
+          if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+            echo "Missing Docker Hub credentials. Add DOCKERHUB_USERNAME and DOCKERHUB_TOKEN secrets."
+            exit 1
+          fi
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - name: Build frontend
         working-directory: web
         run: |
