@@ -1,0 +1,26 @@
+mon_projet/
+│
+├── src/                     # Dossier contenant le code source
+│   ├── __init__.py          # Fichier pour rendre le dossier un package Python
+│   ├── main.py              # Point d'entrée de l'application
+│   ├── module1.py           # Module 1 (ajoutez d'autres modules selon vos besoins)
+│   ├── module2.py           # Module 2
+│   └── utils.py             # Fonctions utilitaires
+│
+├── tests/                   # Dossier contenant les tests
+│   ├── __init__.py
+│   ├── test_module1.py      # Tests pour module1
+│   ├── test_module2.py      # Tests pour module2
+│   └── test_utils.py        # Tests pour utils
+│
+├── data/                    # Dossier pour les fichiers de données
+│   ├── input_data.csv       # Exemple de fichier de données d'entrée
+│   └── output_data.csv      # Exemple de fichier de données de sortie
+│
+├── docs/                    # Dossier pour la documentation
+│   ├── index.md             # Documentation principale
+│   └── guide_utilisateur.md  # Guide de l'utilisateur
+│
+├── requirements.txt         # Fichier pour les dépendances du projet
+├── README.md                # Fichier README pour décrire le projet
+└── .gitignore               # Fichier pour ignorer certains fichiers dans Git

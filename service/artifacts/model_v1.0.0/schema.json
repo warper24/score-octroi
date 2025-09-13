@@ -1,0 +1,25 @@
+{
+  "generated_at": "2025-09-13T01:48:10.387181Z",
+  "dtypes": {
+    "Age_Tit": "float",
+    "Ressource": "float",
+    "Ancien_Banc_Tit": "float",
+    "Mrev_Tit": "float",
+    "Ancien_Prof_Tit": "float",
+    "ZCOM_SR_CL_MIMPOTS": "float",
+    "Charge": "float",
+    "Ratio_Ress_RAV": "float",
+    "MCLFCHAB1_L": "float",
+    "CSP_Tit_worker": "float",
+    "CSP_Tit_others": "float",
+    "MCLFCHAB1_P": "float",
+    "MCLFCHAB1_F": "float",
+    "MCLFCSITFAM_K": "float",
+    "MCLFCSITFAM_M": "float",
+    "CSP_Tit_Managerial position": "float",
+    "MCLFCSITFAM_others": "float",
+    "CSP_Tit_Retired": "float",
+    "MCLFCHAB1_others": "float"
+  },
+  "primary_key": null
+}

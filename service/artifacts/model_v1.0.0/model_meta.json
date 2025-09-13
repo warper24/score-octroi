@@ -1,0 +1,27 @@
+{
+  "model_type": "xgboost",
+  "model_version": "1.0.0",
+  "created_at": "2025-09-13T01:48:10.385897Z",
+  "var_model": [
+    "Age_Tit",
+    "Ressource",
+    "Ancien_Banc_Tit",
+    "Mrev_Tit",
+    "Ancien_Prof_Tit",
+    "ZCOM_SR_CL_MIMPOTS",
+    "Charge",
+    "Ratio_Ress_RAV",
+    "MCLFCHAB1_L",
+    "CSP_Tit_worker",
+    "CSP_Tit_others",
+    "MCLFCHAB1_P",
+    "MCLFCHAB1_F",
+    "MCLFCSITFAM_K",
+    "MCLFCSITFAM_M",
+    "CSP_Tit_Managerial position",
+    "MCLFCSITFAM_others",
+    "CSP_Tit_Retired",
+    "MCLFCHAB1_others"
+  ],
+  "threshold": 0.5
+}
