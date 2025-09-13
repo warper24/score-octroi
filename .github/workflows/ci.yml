@@ -42,8 +42,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-          cache-dependency-path: web/package-lock.json
 
       - name: Build frontend
         working-directory: web
@@ -52,5 +50,4 @@ jobs:
           npm run build
 
       - name: Build Docker image (no push)
-        run: |
-          docker build -t ${{ github.repository }}:ci .
+        run: docker build -t ${{ github.repository }}:ci .

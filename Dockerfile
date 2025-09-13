@@ -3,7 +3,7 @@ FROM node:20-alpine AS ui
 WORKDIR /web
 COPY web/package.json web/vite.config.js ./
 RUN npm ci
-COPY web/ ./ 
+COPY web/ ./
 RUN npm run build
 
 # Stage 2: API
@@ -16,6 +16,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Code + artefacts + front statique
+COPY score_oc ./score_oc
 COPY service ./service
 COPY --from=ui /web/dist ./service/static
 
