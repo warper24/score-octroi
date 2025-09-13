@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  api:
+    build: .
+    image: ${COMPOSE_IMAGE:-score-octroi:local}
+    environment:
+      - ARTIFACT_VERSION=1.0.0
+    ports:
+      - "8000:8000"
