@@ -16,7 +16,6 @@ def indication(df: pd.DataFrame) -> pd.DataFrame:
     df["Age_Tit"] = df["Age_Tit"].fillna(df["Age_Tit"].median())
     for col in ["MCLFCHAB1", "MCLFCSITFAM", "CSP_Tit"]:
         if col in df.columns:
-            # Cast en string pour harmoniser avec l'encodage
             df[col] = df[col].astype("string").fillna("Missing")
     return df
 
@@ -95,7 +94,6 @@ class SimplePreprocessor:
 
     def fit(self, df: pd.DataFrame, target: str):
         self.target_ = target
-        # 0) Indication puis exclusion
         df_ind = indication(df.copy())
         df_ind = exclusion(df_ind)
 
@@ -111,7 +109,7 @@ class SimplePreprocessor:
             self.upper_ = upper.to_dict()
             self.medians_ = num.median().to_dict()
 
-        # 2) Catégorielles (cast -> string, Missing, rares -> others)
+        # 2) Catégorielles
         self.cat_cols_ = df_ind.select_dtypes(include=["object", "string"]).columns.tolist()
         self.rare_sets_.clear()
         if self.cat_cols_:

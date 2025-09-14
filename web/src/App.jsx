@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 export default function App() {
   const [idx, setIdx] = useState(-1);
-  const [display, setDisplay] = useState(null);      // infos opérateur
-  const [features, setFeatures] = useState(null);    // features modèle (VAR_MODEL)
+  const [display, setDisplay] = useState(null);   
+  const [features, setFeatures] = useState(null); 
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 

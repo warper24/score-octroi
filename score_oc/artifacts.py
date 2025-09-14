@@ -15,7 +15,7 @@ def save_xgb_artifacts(model, preprocessor,
     if preprocessor is not None:
         joblib.dump(preprocessor, out_dir / "preprocessor.pkl")
 
-    # 2) Meta
+    # 2) Metadata
     meta = {
         "model_type": "xgboost",
         "model_version": version,

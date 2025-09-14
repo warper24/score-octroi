@@ -22,29 +22,24 @@ app.add_middleware(
     allow_methods=["*"], allow_headers=["*"],
 )
 
-# Load artifacts at startup
 booster = Booster()
 booster.load_model(str(ART_DIR / "model_xgb.json"))
 preprocessor: SimplePreprocessor = joblib.load(ART_DIR / "preprocessor.pkl")
 
-# Load meta + reference (post-preprocess, features var_model + score)
 META = {}
 try:
     META = pd.read_json(ART_DIR / "model_meta.json", typ="series").to_dict()
 except Exception:
     META = {"threshold": 0.5}
 
-# FIX: seuil par défaut à 0.915 (env THRESHOLD prioritaire)
 DEFAULT_THRESHOLD = 0.915
 THRESHOLD = float(os.getenv("THRESHOLD", DEFAULT_THRESHOLD))
 
 REFERENCE = pd.read_parquet(ART_DIR / "reference.parquet")
-# Harmonise: s'assurer que toutes les features demandées existent
 MISSING_FEATS = [c for c in VAR_MODEL if c not in REFERENCE.columns]
 if MISSING_FEATS:
     raise RuntimeError(f"reference.parquet ne contient pas toutes les VAR_MODEL: {MISSING_FEATS}")
 
-# Réordonner pour garantir ≥2 clients prédits 0 (proba < THRESHOLD) dans les 10 premiers
 try:
     scores = booster.inplace_predict(REFERENCE[VAR_MODEL])
     REFERENCE["score"] = scores
@@ -56,7 +51,6 @@ try:
         rest = [i for i in range(len(REFERENCE)) if i not in first_two_neg]
         REFERENCE = REFERENCE.iloc[first_two_neg + rest].reset_index(drop=True)
 except Exception:
-    # On ne bloque pas l'API si le réordonnancement échoue
     pass
 
 def _decode_onehot(row: pd.Series) -> dict[str, str]:
@@ -131,7 +125,6 @@ def reference_client(i: int = Query(0, ge=0)):
         return {"index": i, "has_more": False}
     row = REFERENCE.iloc[i]
     display = _row_to_display(row)
-    # Features pour le modèle: dict {feature: value}
     features = {c: _safe_float(row.get(c)) for c in VAR_MODEL}
     return {"index": i, "has_more": i < n - 1, "display": display, "features": features}
 
@@ -140,17 +133,13 @@ def predict(records: list[dict]):
     if not isinstance(records, list) or len(records) == 0:
         raise HTTPException(status_code=400, detail="Body must be a non-empty JSON array")
     X = pd.DataFrame.from_records(records)
-    # Ici X doit déjà correspondre à VAR_MODEL (référence post-preprocess)
     missing = [c for c in VAR_MODEL if c not in X.columns]
     if missing:
         raise HTTPException(status_code=400, detail=f"Missing features: {missing}")
-    # Probas via Booster
     y_proba = booster.inplace_predict(X[VAR_MODEL])
-    # y_pred seuil meta
     y_pred = (y_proba >= THRESHOLD).astype(int)
     return {"y_proba": y_proba.tolist(), "y_pred": y_pred.tolist(), "threshold": THRESHOLD}
 
-# MONTER le front APRÈS les routes, pour éviter de capturer /reference/* et /predict
 static_dir = Path(__file__).parent / "static"
 if static_dir.exists():
     app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")

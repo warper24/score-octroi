@@ -4,7 +4,7 @@ VERSION = "1.0.0"
 TARGET = "BP"
 ARTIFACTS_DIR = Path("service") / "artifacts"
 
-# Colonnes brutes utiles (depuis le notebook)
+# Colonnes brutes utiles
 DATA_COLUMNS = [
     "ZCOM_SR_CL_MIMPOTS","Mrev_Tit","Ressource","Charge","Ancbanc_Tit",
     "Ancien_Banc_Tit","Ancien_Prof_Tit","Ratio_Ress_RAV","Age_Tit",
@@ -12,7 +12,7 @@ DATA_COLUMNS = [
     "MCLFCHAB1","MCLFCSITFAM","CSP_Tit","BP","Gen_Demande"
 ]
 
-# Variables du modèle (encoded, cohérent avec le notebook "Final Model XGBoost")
+# Variables du modèle
 VAR_MODEL = [
     "Age_Tit","Ressource","Ancien_Banc_Tit","Mrev_Tit","Ancien_Prof_Tit",
     "ZCOM_SR_CL_MIMPOTS","Charge","Ratio_Ress_RAV",
@@ -21,7 +21,7 @@ VAR_MODEL = [
     "CSP_Tit_Retired","MCLFCHAB1_others"
 ]
 
-# Hyperparamètres XGB simples (comme dans le notebook)
+# Hyperparamètres XGB simples
 XGB_PARAMS = dict(
     objective="binary:logistic",
     eval_metric="auc",

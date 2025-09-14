@@ -1,6 +1,6 @@
 import pandas as pd
 
-# Fenêtre de référence par défaut (fixe)
+# Fenêtre de référence par défaut
 REF_START_DEFAULT = "2016-01-01"
 REF_END_DEFAULT = "2016-08-01"
 
@@ -23,7 +23,6 @@ def filter_period(
       start_monitoring/end_monitoring si souhaité.
     """
     if not date_col or date_col not in df.columns:
-        # Pas de colonne date ou pas de filtre -> comportement inchangé
         if any([start_model, end_model, start_monitoring, end_monitoring]):
             return df.copy(), df.iloc[0:0].copy()
         if start or end:
@@ -43,7 +42,6 @@ def filter_period(
     # Mode double-fenêtre si au moins une borne “model” ou “monitoring” est fournie
     if any([start_model, end_model, start_monitoring, end_monitoring]):
         mask_model = build_mask(start_model, end_model)
-        # Fenêtre de référence fixe par défaut si non fournie
         ref_start = start_monitoring or REF_START_DEFAULT
         ref_end = end_monitoring or REF_END_DEFAULT
         mask_ref = build_mask(ref_start, ref_end)

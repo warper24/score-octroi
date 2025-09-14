@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 import pandas as pd
 
-# Supporte: python -m score_oc.cli (imports relatifs) ET python .\score_oc\cli.py (fallback absolu)
 try:
     from .config import VAR_MODEL, TARGET, VERSION, ARTIFACTS_DIR, XGB_PARAMS
     from .data import load_raw, select_columns, ensure_target
