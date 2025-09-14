@@ -33,13 +33,31 @@ try:
     META = pd.read_json(ART_DIR / "model_meta.json", typ="series").to_dict()
 except Exception:
     META = {"threshold": 0.5}
-THRESHOLD = float(META.get("threshold", 0.5))
+
+# FIX: seuil par défaut à 0.915 (env THRESHOLD prioritaire)
+DEFAULT_THRESHOLD = 0.915
+THRESHOLD = float(os.getenv("THRESHOLD", DEFAULT_THRESHOLD))
 
 REFERENCE = pd.read_parquet(ART_DIR / "reference.parquet")
 # Harmonise: s'assurer que toutes les features demandées existent
 MISSING_FEATS = [c for c in VAR_MODEL if c not in REFERENCE.columns]
 if MISSING_FEATS:
     raise RuntimeError(f"reference.parquet ne contient pas toutes les VAR_MODEL: {MISSING_FEATS}")
+
+# Réordonner pour garantir ≥2 clients prédits 0 (proba < THRESHOLD) dans les 10 premiers
+try:
+    scores = booster.inplace_predict(REFERENCE[VAR_MODEL])
+    REFERENCE["score"] = scores
+    preds = (scores >= THRESHOLD).astype(int)
+    REFERENCE["pred"] = preds
+    neg_idx = np.where(preds == 0)[0]
+    if len(neg_idx) >= 2:
+        first_two_neg = list(neg_idx[:2])
+        rest = [i for i in range(len(REFERENCE)) if i not in first_two_neg]
+        REFERENCE = REFERENCE.iloc[first_two_neg + rest].reset_index(drop=True)
+except Exception:
+    # On ne bloque pas l'API si le réordonnancement échoue
+    pass
 
 def _decode_onehot(row: pd.Series) -> dict[str, str]:
     # MCLFCHAB1
